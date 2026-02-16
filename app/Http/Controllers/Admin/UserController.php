@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,7 +14,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::select('id', 'name', 'email', 'role', 'created_at')
+        ->latest()
+        ->get();
+
+    return Inertia::render('Admin/Users/Index', [
+        'users' => $users,
+    ]);
     }
 
     /**
