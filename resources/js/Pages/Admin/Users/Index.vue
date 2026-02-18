@@ -6,12 +6,12 @@ const form = useForm({})
 
 const deleteUser = (id: number) => {
   if (confirm('Are you sure?')) {
-    form.delete(route('admin.users.destroy', id))
+    form.delete(route('users.destroy', id))
   }
 }
  
 defineProps({
-  users: Array
+  users: Object
 })
 </script>
 
@@ -29,6 +29,17 @@ defineProps({
   </Link>
   </div>
 
+      <div v-if="$page.props.flash.success"
+          class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+        {{ $page.props.flash.success }}
+      </div>
+
+      <div v-if="$page.props.flash.error"
+          class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+        {{ $page.props.flash.error }}
+      </div>
+
+
       <table class="w-full border">
         <thead class="bg-gray-100">
           <tr>
@@ -41,10 +52,21 @@ defineProps({
         </thead>
 
         <tbody>
-          <tr v-for="user in users" :key="user.id" class="border-t">
+          <tr v-for="user in users.data" :key="user.id" class="border-t">
             <td class="p-2">{{ user.name }}</td>
             <td class="p-2">{{ user.email }}</td>
-            <td class="p-2 capitalize">{{ user.role }}</td>
+            <td class="p-2">
+              <span
+                class="px-2 py-1 text-xs rounded font-semibold"
+                :class="{
+                  'bg-red-100 text-red-700': user.role === 'admin',
+                  'bg-blue-100 text-blue-700': user.role === 'staff',
+                  'bg-gray-100 text-gray-700': user.role === 'user'
+                }"
+              >
+                {{ user.role }}
+              </span>
+            </td>
             <td class="p-2">
               {{ new Date(user.created_at).toLocaleDateString() }}
             </td>
@@ -65,6 +87,26 @@ defineProps({
           </tr>
         </tbody>
       </table>
+          <div class="mt-4 flex space-x-1">
+        <template v-for="link in users.links" :key="link.label">
+          <Link
+            v-if="link.url"
+            :href="link.url"
+            v-html="link.label"
+            class="px-3 py-1 border rounded text-sm"
+            :class="{
+              'bg-blue-600 text-white': link.active,
+              'text-gray-700': !link.active
+            }"
+          />
+          <span
+            v-else
+            v-html="link.label"
+            class="px-3 py-1 border rounded text-gray-400 text-sm"
+          />
+        </template>
+    </div>
+
     </div>
   </AdminLayout>
 </template>

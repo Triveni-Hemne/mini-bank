@@ -17,7 +17,8 @@ class UserController extends Controller
     {
         $users = User::select('id', 'name', 'email', 'role', 'created_at')
         ->latest()
-        ->get();
+        ->paginate(2)
+        ->withQueryString();
 
     return Inertia::render('Admin/Users/Index', [
         'users' => $users,
@@ -104,7 +105,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         // Optional safety: prevent admin deleting themselves
         if (auth()->id() === $user->id) {
