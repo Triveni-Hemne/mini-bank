@@ -48,6 +48,12 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
+        if (auth()->user()->status === 'suspended') {
+                auth()->logout();
+                throw ValidationException::withMessages([
+                    'email' => 'Your account has been suspended.',
+                ]);
+        }
 
         RateLimiter::clear($this->throttleKey());
     }
