@@ -6,7 +6,8 @@ const form = useForm({
   name: '',
   email: '',
   password: '',
-  role: 'user'
+  role: 'user',
+  status: 'active'
 })
 
 const submit = () => {
@@ -74,6 +75,15 @@ const submit = () => {
             <option value="user">User</option>
           </select>
         </div>
+
+        <div>
+        <label class="block text-sm mb-1">Status</label>
+        <select v-model="form.status" class="w-full border p-2 rounded">
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+        </select>
+      </div>
+
 
         <button
           type="submit"

@@ -2,7 +2,6 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Link, Head, useForm } from '@inertiajs/vue3'
 
-const form = useForm({})
 
 const deleteUser = (id: number) => {
   if (confirm('Are you sure?')) {
@@ -10,15 +9,51 @@ const deleteUser = (id: number) => {
   }
 }
  
-defineProps({
-  users: Object
+const props = defineProps({
+  users: Object,
+  filters: Object
 })
+
+const form = useForm({
+  search: props.filters.search || '',
+  role: props.filters.role || ''
+})
+
+const applyFilters = () => {
+  form.get(route('users.index'), {
+    preserveState: true,
+    replace: true
+  })
+}
+
 </script>
 
 <template>
   <AdminLayout>
     <Head title="Users" />
     <div class="bg-white p-6 rounded shadow ">
+    <div class="flex gap-4 mb-4">
+      <!-- Search -->
+      <input
+        v-model="form.search"
+        @input="applyFilters"
+        placeholder="Search name or email..."
+        class="border p-2 rounded w-64"
+      />
+
+      <!-- Role Filter -->
+      <select
+        v-model="form.role"
+        @change="applyFilters"
+        class="border p-2 rounded"
+      >
+        <option value="">All Roles</option>
+        <option value="admin">Admin</option>
+        <option value="staff">Staff</option>
+        <option value="user">User</option>
+      </select>
+    </div>
+
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-semibold mb-4">Users</h2>
       <Link
@@ -46,6 +81,7 @@ defineProps({
             <th class="p-2 text-left">Name</th>
             <th class="p-2 text-left">Email</th>
             <th class="p-2 text-left">Role</th>
+            <th class="p-2 text-left">status</th>
             <th class="p-2 text-left">Created</th>
             <th class="p-2 text-left">Actions</th>
           </tr>
@@ -65,6 +101,17 @@ defineProps({
                 }"
               >
                 {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <span
+                class="px-2 py-1 text-xs rounded font-semibold"
+                :class="{
+                  'bg-green-100 text-green-700': user.status === 'active',
+                  'bg-yellow-100 text-yellow-700': user.status === 'suspended'
+                }"
+              >
+                {{ user.status }}
               </span>
             </td>
             <td class="p-2">

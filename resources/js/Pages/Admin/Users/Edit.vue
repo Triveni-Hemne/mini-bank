@@ -10,7 +10,8 @@ const form = useForm({
   name: props.user.name,
   email: props.user.email,
   password: '',
-  role: props.user.role
+  role: props.user.role,
+  status: props.user.role,
 })
 
 const submit = () => {
@@ -61,6 +62,14 @@ const submit = () => {
             <option value="user">User</option>
           </select>
         </div>
+        <div>
+          <label>Status</label>
+          <select v-model="form.status" class="w-full border p-2 rounded">
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+
 
         <button
           type="submit"

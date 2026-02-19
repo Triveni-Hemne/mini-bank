@@ -13,16 +13,27 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::select('id', 'name', 'email', 'role', 'created_at')
-        ->latest()
-        ->paginate(2)
-        ->withQueryString();
+        $users = User::query()
+                ->when($request->search, function ($query, $search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                    });
+                })
+                ->when($request->role, function ($query, $role) {
+                    $query->where('role', $role);
+                })
+                ->select('id', 'name', 'email', 'role', 'status', 'created_at')
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
 
-    return Inertia::render('Admin/Users/Index', [
-        'users' => $users,
-    ]);
+            return Inertia::render('Admin/Users/Index', [
+                'users' => $users,
+                'filters' => $request->only(['search', 'role']),
+            ]);
     }
 
     /**
@@ -43,6 +54,7 @@ class UserController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:6'],
             'role' => ['required', 'in:admin,staff,user'],
+            'status' => ['required', 'in:active,suspended'],
         ]);
 
         User::create([
@@ -50,6 +62,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'status' => $validated['status'],
         ]);
 
         return redirect()
@@ -71,7 +84,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('Admin/Users/Edit', [
-            'user' => $user->only('id', 'name', 'email', 'role'),
+            'user' => $user->only('id', 'name', 'email', 'status', 'role'),
         ]);
     }
 
@@ -85,11 +98,13 @@ class UserController extends Controller
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'min:6'],
             'role' => ['required', 'in:admin,staff,user'],
+            'status' => ['required', 'in:active,suspended'],
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->role = $validated['role'];
+        $user->status = $validated['status'];
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
