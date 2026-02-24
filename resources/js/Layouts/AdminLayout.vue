@@ -25,9 +25,9 @@ const form = useForm({})
             Dashboard
             </Link>
 
-            <Link :href="route('users.index')" 
+            <Link :href="route('admin.users.index')" 
             :class="[
-                route().current('users.*')
+                route().current('admin.users.*')
                 ? 'bg-gray-700'
                 : '',
                 'block hover:bg-gray-700 p-2 rounded'
@@ -35,9 +35,20 @@ const form = useForm({})
             >
             Users
             </Link>
-        <a href="/admin/users" class="block hover:bg-gray-700 p-2 rounded">
+        <a href="#" class="block hover:bg-gray-700 p-2 rounded">
           Reports
         </a>
+
+        <Link :href="route('admin.activity.index')" 
+          :class="[
+              route().current('admin.*')
+              ? 'bg-gray-700'
+              : '',
+              'block hover:bg-gray-700 p-2 rounded'
+          ]"
+          >
+          Audit Trail
+          </Link>
       </nav>
       
       <div class="mt-10 border-t border-gray-700 pt-4">
