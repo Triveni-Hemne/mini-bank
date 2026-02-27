@@ -16,9 +16,9 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -64,9 +64,23 @@ Route::middleware(['auth'])->group(function () {
         ->name('staff.')
         ->group(function () {
 
-            Route::get('/dashboard', function () {
-                return Inertia::render('Staff/Dashboard');
-            })->name('dashboard');
+            // Route::get('/dashboard', function () {
+            //     return Inertia::render('Staff/Dashboard');
+            // })->name('dashboard');
+            Route::get('/dashboard',
+                [\App\Http\Controllers\Staff\DashboardController::class, 'index']
+            )->name('dashboard');
+
+            Route::resource('accounts', \App\Http\Controllers\Staff\AccountController::class);
+            Route::get('transactions', [\App\Http\Controllers\Staff\TransactionController::class, 'index'])
+                ->name('transactions.index');
+            Route::get('transactions/create/{account}', [\App\Http\Controllers\Staff\TransactionController::class, 'create'])
+                ->name('transactions.create');
+            Route::post('transactions', [\App\Http\Controllers\Staff\TransactionController::class, 'store'])
+                ->name('transactions.store');
+            Route::get('accounts/{account}/statement',[\App\Http\Controllers\Staff\TransactionController::class, 'statement'])
+                ->name('accounts.statement');
+            
         });
 
     /*
