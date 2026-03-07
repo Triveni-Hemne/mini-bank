@@ -1,7 +1,14 @@
 <script setup>
+import { watch } from 'vue'
+import axios from 'axios'
+
+
 import { Link, usePage, router } from '@inertiajs/vue3'
 import { ref,onMounted  } from 'vue'
 
+const searchQuery = ref('')
+const searchResults = ref(null)
+const showResults = ref(false)
 const page = usePage()
 const showDropdown = ref(false)
 const isCollapsed = ref(false)
@@ -42,6 +49,25 @@ const navClass = (routeName) => {
       : 'hover:bg-gray-800 hover:text-white'
   ]
 }
+let timeout = null
+
+watch(searchQuery, (value) => {
+  clearTimeout(timeout)
+
+  if (!value) {
+    searchResults.value = null
+    return
+  }
+
+  timeout = setTimeout(async () => {
+    const response = await axios.get(route('staff.search'), {
+      params: { q: value }
+    })
+
+    searchResults.value = response.data
+    showResults.value = true
+  }, 300)
+})
 </script>
 
 <template>
@@ -148,7 +174,68 @@ const navClass = (routeName) => {
   <h1 class="text-lg font-semibold text-gray-700">
     Staff Panel
   </h1>
+<div class="relative w-80 hidden md:block">
 
+  <input
+    v-model="searchQuery"
+    type="text"
+    placeholder="Search accounts, users, transactions..."
+    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  />
+
+  <!-- Results Dropdown -->
+  <div
+    v-if="showResults && searchResults"
+    class="absolute mt-2 w-full bg-white border rounded-lg shadow-lg max-h-80 overflow-y-auto z-50"
+  >
+
+    <!-- Accounts -->
+    <div v-if="searchResults.accounts?.length">
+      <div class="px-4 py-2 text-xs text-gray-500 uppercase">
+        Accounts
+      </div>
+
+      <div
+        v-for="account in searchResults.accounts"
+        :key="account.id"
+        class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+      >
+        {{ account.account_number }}
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div v-if="searchResults.users?.length">
+      <div class="px-4 py-2 text-xs text-gray-500 uppercase">
+        Users
+      </div>
+
+      <div
+        v-for="user in searchResults.users"
+        :key="user.id"
+        class="px-4 py-2 hover:bg-gray-100"
+      >
+        {{ user.name }} ({{ user.email }})
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div v-if="searchResults.transactions?.length">
+      <div class="px-4 py-2 text-xs text-gray-500 uppercase">
+        Transactions
+      </div>
+
+      <div
+        v-for="txn in searchResults.transactions"
+        :key="txn.id"
+        class="px-4 py-2 hover:bg-gray-100"
+      >
+        {{ txn.reference_number }}
+      </div>
+    </div>
+
+  </div>
+</div>
   <!-- User Dropdown -->
   <div class="relative">
 

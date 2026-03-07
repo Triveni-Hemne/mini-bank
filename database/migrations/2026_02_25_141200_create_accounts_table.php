@@ -19,6 +19,10 @@ return new class extends Migration
             $table->decimal('balance', 15, 2)->default(0);
             $table->string('status')->default('active');
             $table->timestamps();
+            $table->index('account_number');
+            $table->index('user_id');
+            $table->index('account_type');
+            $table->index('status');
         });
     }
 

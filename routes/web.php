@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Staff\StaffSearchController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -80,6 +81,8 @@ Route::middleware(['auth'])->group(function () {
                 ->name('transactions.store');
             Route::get('accounts/{account}/statement',[\App\Http\Controllers\Staff\TransactionController::class, 'statement'])
                 ->name('accounts.statement');
+            Route::get('/search', [StaffSearchController::class, 'search'])
+                ->name('staff.search');
             
         });
 

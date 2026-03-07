@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Account;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AccountPolicy
 {
@@ -29,7 +28,7 @@ class AccountPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasRole('staff');
     }
 
     /**

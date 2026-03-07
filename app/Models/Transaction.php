@@ -14,4 +14,9 @@ class Transaction extends Model
         'reference_no',
         'created_by',
     ];
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

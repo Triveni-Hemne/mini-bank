@@ -50,6 +50,10 @@ class User extends Authenticatable
     {
         return $user->assignRole('user');
     }
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 
     /**
      * Get the attributes that should be cast.
