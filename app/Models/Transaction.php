@@ -19,4 +19,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// use App\Models\Account;
+use App\Models\Account;
+use App\Models\Transaction;
 // use App\Models\User;
 use Inertia\Inertia;
 // use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-           $transactions = \App\Models\Transaction::with(['account.user', 'staff'])
+           $transactions = Transaction::with(['account.user', 'staff'])
                 ->latest()
                 ->paginate(15);
 
@@ -52,7 +53,7 @@ class TransactionController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            $account = \App\Models\Account::lockForUpdate()->find($request->account_id);
+            $account = Account::lockForUpdate()->find($request->account_id);
 
             // Prevent overdraft
             if ($request->type === 'debit' && $account->balance < $request->amount) {
@@ -89,9 +90,13 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Transaction $transaction)
     {
-        //
+        $transaction->load('account.user');
+
+        return Inertia::render('Staff/Transactions/Show', [
+            'transaction' => $transaction
+        ]);
     }
 
     /**

@@ -79,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
                 ->name('transactions.create');
             Route::post('transactions', [\App\Http\Controllers\Staff\TransactionController::class, 'store'])
                 ->name('transactions.store');
+            Route::get('/transactions/{transaction}', [\App\Http\Controllers\Staff\TransactionController::class, 'show'])->name('transactions.show');
             Route::get('accounts/{account}/statement',[\App\Http\Controllers\Staff\TransactionController::class, 'statement'])
                 ->name('accounts.statement');
             Route::get('/search', [StaffSearchController::class, 'search'])
