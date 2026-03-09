@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Staff\StaffSearchController;
+use App\Http\Controllers\Staff\TransactionController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -73,17 +74,28 @@ Route::middleware(['auth'])->group(function () {
             )->name('dashboard');
 
             Route::resource('accounts', \App\Http\Controllers\Staff\AccountController::class);
-            Route::get('transactions', [\App\Http\Controllers\Staff\TransactionController::class, 'index'])
+            Route::get('transactions', [TransactionController::class, 'index'])
                 ->name('transactions.index');
-            Route::get('transactions/create/{account}', [\App\Http\Controllers\Staff\TransactionController::class, 'create'])
+            Route::get('transactions/create/{account}', [TransactionController::class, 'create'])
                 ->name('transactions.create');
-            Route::post('transactions', [\App\Http\Controllers\Staff\TransactionController::class, 'store'])
+            Route::post('transactions', [TransactionController::class, 'store'])
                 ->name('transactions.store');
-            Route::get('/transactions/{transaction}', [\App\Http\Controllers\Staff\TransactionController::class, 'show'])->name('transactions.show');
-            Route::get('accounts/{account}/statement',[\App\Http\Controllers\Staff\TransactionController::class, 'statement'])
+            Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+            Route::get('accounts/{account}/statement',[TransactionController::class, 'statement'])
                 ->name('accounts.statement');
             Route::get('/search', [StaffSearchController::class, 'search'])
                 ->name('staff.search');
+            Route::get('/accounts/{account}/deposit', [TransactionController::class, 'depositForm'])
+                ->name('transactions.deposit.form');
+
+            Route::post('/accounts/{account}/deposit', [TransactionController::class, 'deposit'])
+                ->name('transactions.deposit');
+
+            Route::get('/accounts/{account}/withdraw', [TransactionController::class, 'withdrawForm'])
+                ->name('transactions.withdraw.form');
+
+            Route::post('/accounts/{account}/withdraw', [TransactionController::class, 'withdraw'])
+                ->name('transactions.withdraw');
             
         });
 

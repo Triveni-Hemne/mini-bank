@@ -114,26 +114,24 @@ defineProps({
     </h2>
 
     <div class="flex gap-4">
-
       <Link
-        href="#"
-        class="px-4 py-2 bg-green-600 text-white rounded-lg"
+      :href="route('staff.transactions.deposit.form', account.id)"
+      class="bg-green-600 text-white px-4 py-2 rounded mr-2"
       >
-        Deposit
+      Deposit
       </Link>
 
       <Link
-        href="#"
-        class="px-4 py-2 bg-red-600 text-white rounded-lg"
+      :href="route('staff.transactions.withdraw.form', account.id)"
+      class="bg-red-600 text-white px-4 py-2 rounded mr-2"
       >
-        Withdraw
+      Withdraw
       </Link>
-
       <Link
-        href="#"
-        class="px-4 py-2 bg-gray-700 text-white rounded-lg"
+      :href="route('staff.accounts.statement', account.id)"
+      class=" bg-gray-700 text-white px-4 py-2 rounded"
       >
-        View Statement
+      View Statement
       </Link>
 
     </div>

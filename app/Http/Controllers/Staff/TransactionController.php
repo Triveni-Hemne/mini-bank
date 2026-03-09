@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Http\Requests\StoreTransactionRequest;
+use Illuminate\Support\Str;
 
 class TransactionController extends Controller
 {
@@ -180,5 +181,77 @@ class TransactionController extends Controller
             'opening_balance' => $openingBalance,
             'filters' => $request->only('from', 'to'),
         ]);
-    }   
+    } 
+    
+    public function depositForm(Account $account)
+    {
+        $account->load('user');
+
+        return Inertia::render('Staff/Transactions/Deposit', [
+            'account' => $account
+        ]);
+    }
+
+    public function withdrawForm(Account $account)
+    {
+        $account->load('user');
+
+        return Inertia::render('Staff/Transactions/Withdraw', [
+            'account' => $account
+        ]);
+    }
+
+    public function deposit(Request $request, Account $account)
+    {
+        $data = $request->validate([
+            'amount' => ['required','numeric','min:1']
+        ]);
+
+        DB::transaction(function () use ($account, $data) {
+
+            Transaction::create([
+                'account_id' => $account->id,
+                'type' => 'credit',
+                'amount' => $data['amount'],
+                'reference_number' => 'TXN-' . strtoupper(Str::random(10)),
+                'created_by' => auth()->id(),
+            ]);
+
+            $account->increment('balance', $data['amount']);
+        });
+
+        return redirect()
+            ->route('staff.accounts.show', $account)
+            ->with('success', 'Deposit successful');
+    }
+
+    public function withdraw(Request $request, Account $account)
+    {
+        $data = $request->validate([
+            'amount' => ['required','numeric','min:1']
+        ]);
+
+        DB::transaction(function () use ($account, $data) {
+
+            $account->refresh();
+
+            if ($account->balance < $data['amount']) {
+                abort(400, 'Insufficient balance');
+            }
+
+            Transaction::create([
+                'account_id' => $account->id,
+                'type' => 'debit',
+                'amount' => $data['amount'],
+                'reference_number' => 'TXN-' . strtoupper(Str::random(10)),
+                'created_by' => auth()->id(),
+            ]);
+
+            $account->decrement('balance', $data['amount']);
+        });
+
+        return redirect()
+            ->route('staff.accounts.show', $account)
+            ->with('success', 'Withdrawal successful');
+    }
 }
