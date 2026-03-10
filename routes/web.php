@@ -109,9 +109,15 @@ Route::middleware(['auth'])->group(function () {
         ->name('user.')
         ->group(function () {
 
-            Route::get('/dashboard', function () {
-                return Inertia::render('User/Dashboard');
-            })->name('dashboard');
+            // Route::get('/dashboard', function () {
+            //     return Inertia::render('User/Dashboard');
+            // })->name('dashboard');
+            Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])
+            ->name('dashboard');
+            Route::get('/accounts', [\App\Http\Controllers\User\AccountController::class, 'index'])
+            ->name('accounts.index');
+            Route::get('/transactions', [\App\Http\Controllers\User\TransactionController::class, 'index'])
+            ->name('transactions.index');
         });
 
 });
