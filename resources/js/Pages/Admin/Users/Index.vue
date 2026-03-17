@@ -19,7 +19,7 @@ const form = useForm({
 })
 
 const applyFilters = () => {
-  form.get(route('users.index'), {
+  form.get(route('admin.users.index'), {
     preserveState: true,
     replace: true
   })
@@ -28,7 +28,8 @@ const applyFilters = () => {
 const page = usePage()
 
 const can = (permission: string) => {
-  return page.props.auth.permissions?.includes(permission)
+  console.log(page.props.auth.user.permissions)
+  return page.props.auth.user.permissions?.includes(permission)
 }
 
 </script>
@@ -62,7 +63,7 @@ const can = (permission: string) => {
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-semibold mb-4">Users</h2>
       <Link v-if="can('create user')"
-    :href="route('users.create')"
+    :href="route('admin.users.create')"
     class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
   >
     + Add User
@@ -124,7 +125,7 @@ const can = (permission: string) => {
             </td>
             <td class="p-2 space-x-2">
               <Link v-if="can('edit user')"
-                :href="route('users.edit', user.id)"
+                :href="route('admin.users.edit', user.id)"
                 class="text-blue-600 hover:underline"
               >
                 Edit

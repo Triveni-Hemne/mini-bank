@@ -58,7 +58,7 @@ class AccountController extends Controller
     {
         $validated = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'account_type' => ['required', 'in:savings,current,loan'],
+            'account_type' => ['required', 'in:savings,current,loan,fd'],
             'opening_balance' => ['nullable', 'numeric', 'min:0'],
         ]);
 

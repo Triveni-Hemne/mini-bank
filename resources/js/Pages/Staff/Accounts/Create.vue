@@ -77,6 +77,7 @@ const submit = () => {
             <option value="savings">Savings</option>
             <option value="current">Current</option>
             <option value="loan">Loan</option>
+            <option value="fd">FD</option>
           </select>
 
           <div v-if="form.errors.account_type" class="text-red-500 text-sm mt-1">
