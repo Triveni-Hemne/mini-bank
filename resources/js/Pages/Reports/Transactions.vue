@@ -44,7 +44,7 @@ const filter = (e) => {
 
       <!-- Filters -->
       <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
-        <form @submit.prevent="filter" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form @submit.prevent="filter" class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
           <div>
             <label class="text-sm text-gray-500">From Date</label>

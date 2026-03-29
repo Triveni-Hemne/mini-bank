@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Link, usePage, useForm } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
+const openReports = ref(false)
 const page = usePage()
 const form = useForm({})
 </script>
@@ -35,16 +37,65 @@ const form = useForm({})
             >
             Users
             </Link>
-            <Link :href="route('admin.reports.transactions')" 
-                :class="[
-                    route().current('admin.reports.*')
-                    ? 'bg-gray-700'
-                    : '',
-                    'block hover:bg-gray-700 p-2 rounded'
-                ]"
+            <!-- Reports Dropdown -->
+            <div>
+
+              <!-- Parent -->
+              <button
+                @click="openReports = !openReports"
+                class="w-full flex justify-between items-center p-2 rounded hover:bg-gray-700"
+                :class="route().current('admin.reports.*') ? 'bg-gray-700' : ''"
+              >
+                <span>Reports</span>
+                <span>{{ openReports ? '▲' : '▼' }}</span>
+              </button>
+
+              <!-- Children -->
+              <div v-show="openReports" class="ml-4 mt-1 space-y-1">
+
+                <Link
+                  :href="route('admin.reports.transactions')"
+                  class="block p-2 rounded hover:bg-gray-700"
+                  :class="route().current('admin.reports.transactions') ? 'bg-gray-700' : ''"
                 >
-              Reports
-            </Link>
+                  Transactions
+                </Link>
+
+                <Link
+                  :href="route('admin.reports.customers')"
+                  class="block p-2 rounded hover:bg-gray-700"
+                  :class="route().current('admin.reports.customers') ? 'bg-gray-700' : ''"
+                >
+                  Customers
+                </Link>
+                <!-- 
+                <Link
+                  :href="route('admin.reports.accounts')"
+                  class="block p-2 rounded hover:bg-gray-700"
+                  :class="route().current('admin.reports.accounts') ? 'bg-gray-700' : ''"
+                >
+                  Accounts
+                </Link>
+
+                <Link
+                  :href="route('admin.reports.loans')"
+                  class="block p-2 rounded hover:bg-gray-700"
+                  :class="route().current('admin.reports.loans') ? 'bg-gray-700' : ''"
+                >
+                  Loans
+                </Link>
+
+                <Link
+                  :href="route('admin.reports.daily')"
+                  class="block p-2 rounded hover:bg-gray-700"
+                  :class="route().current('admin.reports.daily') ? 'bg-gray-700' : ''"
+                >
+                  Daily Report
+                </Link> -->
+
+              </div>
+
+            </div>
 
         <Link :href="route('admin.activity.index')" 
           :class="[

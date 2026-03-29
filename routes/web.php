@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Staff\StaffSearchController;
 use App\Http\Controllers\Staff\TransactionController;
 use App\Http\Controllers\Reports\TransactionReportController;
+use App\Http\Controllers\Reports\CustomerReportController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -58,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/reports/transactions', [TransactionReportController::class, 'index'])
             ->name('reports.transactions');
+            Route::get('/reports/customers', [CustomerReportController::class, 'index'])
+            ->name('reports.customers');
         });
 
     /*
