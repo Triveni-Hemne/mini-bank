@@ -68,7 +68,7 @@ const form = useForm({})
                 >
                   Customers
                 </Link>
-                <!-- 
+                
                 <Link
                   :href="route('admin.reports.accounts')"
                   class="block p-2 rounded hover:bg-gray-700"
@@ -76,7 +76,7 @@ const form = useForm({})
                 >
                   Accounts
                 </Link>
-
+<!-- 
                 <Link
                   :href="route('admin.reports.loans')"
                   class="block p-2 rounded hover:bg-gray-700"
