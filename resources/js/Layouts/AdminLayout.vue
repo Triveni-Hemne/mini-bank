@@ -35,9 +35,16 @@ const form = useForm({})
             >
             Users
             </Link>
-        <a href="#" class="block hover:bg-gray-700 p-2 rounded">
-          Reports
-        </a>
+            <Link :href="route('admin.reports.transactions')" 
+                :class="[
+                    route().current('admin.reports.*')
+                    ? 'bg-gray-700'
+                    : '',
+                    'block hover:bg-gray-700 p-2 rounded'
+                ]"
+                >
+              Reports
+            </Link>
 
         <Link :href="route('admin.activity.index')" 
           :class="[
