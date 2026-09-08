@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Staff\StaffSearchController;
 use App\Http\Controllers\Staff\TransactionController;
 use App\Http\Controllers\Reports\TransactionReportController;
@@ -49,9 +50,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.')
         ->group(function () {
 
-            Route::get('/dashboard', function () {
-                return Inertia::render('Admin/Dashboard');
-            })->name('dashboard');
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
             Route::resource('users', UserController::class);
 
@@ -64,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('reports.customers');
             Route::get('/reports/accounts', [AccountReportController::class, 'index'])
             ->name('reports.accounts');
+            Route::resource('transactions', App\Http\Controllers\Admin\TransactionController::class);
         });
 
     /*

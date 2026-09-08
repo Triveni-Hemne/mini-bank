@@ -99,13 +99,23 @@ const form = useForm({})
 
         <Link :href="route('admin.activity.index')" 
           :class="[
-              route().current('admin.*')
+              route().current('admin.activity.*')
               ? 'bg-gray-700'
               : '',
               'block hover:bg-gray-700 p-2 rounded'
           ]"
           >
           Audit Trail
+          </Link>
+           <Link :href="route('admin.transactions.index')" 
+          :class="[
+              route().current('admin.transactions.*')
+              ? 'bg-gray-700'
+              : '',
+              'block hover:bg-gray-700 p-2 rounded'
+          ]"
+          >
+          Transactions
           </Link>
       </nav>
       
