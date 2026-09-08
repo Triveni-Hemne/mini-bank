@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Staff\StaffSearchController;
@@ -53,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
             Route::resource('users', UserController::class);
+            Route::resource('roles', RoleController::class);
 
             Route::get('activity', [ActivityController::class, 'index'])
                 ->name('activity.index');
