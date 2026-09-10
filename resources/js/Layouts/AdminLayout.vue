@@ -37,6 +37,17 @@ const form = useForm({})
             >
             Users
             </Link>
+
+            <Link :href="route('admin.roles.index')" 
+            :class="[
+                route().current('admin.roles.*')
+                ? 'bg-gray-700'
+                : '',
+                'block hover:bg-gray-700 p-2 rounded'
+            ]"
+            >
+            Roles &amp; Permissions
+            </Link>
             <!-- Reports Dropdown -->
             <div>
 
