@@ -91,11 +91,8 @@ class="text-red-600 text-sm"
 >
 Logout
 </Link>
-
 </div>
-
 </header>
-
 
 <!-- Page Content -->
 <main class="flex-1 p-6">
