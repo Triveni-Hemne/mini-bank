@@ -22,10 +22,10 @@ class Role extends Authenticatable
         'name',
     ];
 
-    // public function permissions()
-    // {
-    //     return $this->hasMany(Permission::class);
-    // }
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
 
 
 

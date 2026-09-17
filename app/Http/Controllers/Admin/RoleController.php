@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Models\Role As SpatieRole;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +27,9 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {   
-        $roles = Role::with('permissions')
-         ->select('id', 'name')
+        $roles = SpatieRole::withCount('permissions')
+            ->with('permissions')
+        //  ->select('id', 'name')
         ->paginate(10)
         ->withQueryString();
         // dd($roles);
