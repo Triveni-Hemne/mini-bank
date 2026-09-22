@@ -91,8 +91,8 @@ const can = (permission: string) => {
           <tr v-for="role in roles?.data || []" :key="role.id" class="border-t">
             <td class="p-2">{{ role.name }} 
               <Link v-if="can('create role')"
-                :href="route('admin.roles.permissions.edit', role.id)"
-                class="text-dark px-4 py-2 rounded hover:bg-blue-600"
+              :href="route('admin.roles.permissions.edit', role.id)"
+              class="text-dark px-4 py-2 rounded hover:bg-blue-600"
               >
                 Manage Permissions
               </Link>

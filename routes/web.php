@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);
+            Route::resource('roles/permissions', RoleController::class);
 
             Route::get('activity', [ActivityController::class, 'index'])
                 ->name('activity.index');
@@ -120,10 +121,6 @@ Route::middleware(['auth'])->group(function () {
         ->prefix('user')
         ->name('user.')
         ->group(function () {
-
-            // Route::get('/dashboard', function () {
-            //     return Inertia::render('User/Dashboard');
-            // })->name('dashboard');
             Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])
             ->name('dashboard');
             Route::get('/accounts', [\App\Http\Controllers\User\AccountController::class, 'index'])
