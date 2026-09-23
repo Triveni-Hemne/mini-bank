@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Staff\StaffSearchController;
@@ -55,7 +56,17 @@ Route::middleware(['auth'])->group(function () {
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);
-            Route::resource('roles/permissions', RoleController::class);
+            Route::get(
+            'roles/{role}/permissions',
+                [RoleController::class, 'editPermissions']
+            )->name('roles.permissions.edit');
+
+            Route::put(
+                'roles/{role}/permissions',
+                [RoleController::class, 'updatePermissions']
+            )->name('roles.permissions.update');
+
+            Route::resource('roles/permissions', PermissionController::class);
 
             Route::get('activity', [ActivityController::class, 'index'])
                 ->name('activity.index');
